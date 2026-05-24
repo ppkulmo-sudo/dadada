@@ -1,0 +1,28 @@
+:root {
+    color-scheme: light;
+}
+
+body.clean-site {
+    margin: 0;
+    min-height: 100vh;
+    background: #fff;
+}
+
+.clean-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.clean-header,
+.clean-footer {
+    flex: 0 0 auto;
+}
+
+.clean-main {
+    flex: 1 1 auto;
+}
+
+[data-clean-content] {
+    min-height: 40vh;
+}

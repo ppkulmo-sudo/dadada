@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Account Overview | NOHEX</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg">
+    <link rel="stylesheet" href="/assets/css/account.css">
+</head>
+<body data-account-page="overview">
+    <div class="account-loading" data-account-loading>
+        <div class="account-loading__panel">
+            <h2>Loading your account</h2>
+            <p class="account-muted">Checking your session with the API service.</p>
+        </div>
+    </div>
+
+    <div class="account-error" data-account-error hidden>
+        <div class="account-error__panel">
+            <h2>Account unavailable</h2>
+            <p class="account-muted">The API service could not be reached. Check the backend and try again.</p>
+        </div>
+    </div>
+
+    <div class="account-shell" data-account-root hidden>
+        <aside class="account-sidebar">
+            <a class="account-brand" href="/">
+                <img src="/assets/img/logo.svg" alt="NOHEX">
+                <span>NOHEX</span>
+            </a>
+
+            <div class="account-profile-card">
+                <div class="account-profile-card__label">Signed In As</div>
+                <div class="account-profile-card__value" data-user-email>...</div>
+                <div class="account-pill">Verification: <span data-user-status>...</span></div>
+            </div>
+
+            <nav class="account-nav">
+                <a class="active" href="/profile/">Overview</a>
+                <a href="/profile/wallet/">Wallet</a>
+                <a href="/profile/trading/">Trading</a>
+                <a href="/profile/verification/">Verification</a>
+                <a href="/profile/staking/">Staking</a>
+                <a href="/profile/referral/">Referral</a>
+                <a href="/profile/deposit-verification/">Deposit Verification</a>
+            </nav>
+        </aside>
+
+        <main class="account-main">
+            <div class="account-topbar">
+                <div>
+                    <h1>Account Overview</h1>
+                    <p>Your frontend is now using the VPS API for authentication and account state.</p>
+                </div>
+                <button class="account-logout" data-account-logout>Log Out</button>
+            </div>
+
+            <div class="account-grid">
+                <section class="account-card account-card--wide">
+                    <h2>Environment</h2>
+                    <p>This account area is no longer the mirrored login page. It is a real authenticated shell backed by the SQLite API service.</p>
+                    <div class="account-stat-list">
+                        <div class="account-stat">
+                            <div class="account-stat__label">Email</div>
+                            <div class="account-stat__value" data-user-email>...</div>
+                        </div>
+                        <div class="account-stat">
+                            <div class="account-stat__label">Created</div>
+                            <div class="account-stat__value" data-user-created>...</div>
+                        </div>
+                        <div class="account-stat">
+                            <div class="account-stat__label">Status</div>
+                            <div class="account-stat__value" data-user-status>...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="account-card account-card--side">
+                    <h2>Next Steps</h2>
+                    <p>Point Caddy at this frontend on the main domain and reverse proxy `api.domain.com` to the Python backend.</p>
+                </section>
+
+                <section class="account-card">
+                    <h2>Demo Balances</h2>
+                    <table class="account-balance-table">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Available</th>
+                            </tr>
+                        </thead>
+                        <tbody data-balance-table>
+                            <tr>
+                                <td colspan="2" class="account-muted">Loading balances...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/assets/js/account.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Level 2 Verification | NOHEX</title>
+    <meta http-equiv="refresh" content="0; url=/clean/profile/verification/?level=2">
+    <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            font-family: Roboto, Arial, sans-serif;
+            background: linear-gradient(180deg, #fffaf0 0%, #f6f7fb 100%);
+            color: #191e28;
+        }
+
+        .redirect-card {
+            width: min(560px, calc(100% - 32px));
+            background: #fff;
+            border: 1px solid rgba(247, 166, 0, 0.18);
+            border-radius: 24px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+            padding: 28px;
+        }
+
+        .redirect-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #fff3d6;
+            color: #9a6700;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 16px 0 12px;
+            font-size: 30px;
+            line-height: 1.15;
+        }
+
+        p {
+            margin: 0;
+            color: #667085;
+            line-height: 1.65;
+            font-size: 15px;
+        }
+
+        a {
+            color: #191e28;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-card">
+        <div class="redirect-badge">Level 2 Verification</div>
+        <h1>Opening the new proof-of-address flow</h1>
+        <p>
+            This route now uses the upgraded Level 2 verification wizard for utility bills and bank statements issued within the last 3 months.
+            If you are not redirected automatically, <a href="/clean/profile/verification/?level=2">open the verification page here</a>.
+        </p>
+    </div>
+    <script>
+        location.replace('/clean/profile/verification/?level=2');
+    </script>
+</body>
+</html>
