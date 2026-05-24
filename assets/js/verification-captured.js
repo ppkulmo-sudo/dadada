@@ -518,7 +518,7 @@ function initCapturedVerificationPage() {
             return false;
         }
         if (level === 1) {
-            window.location.href = '/clean/profile/verification-lvl1/';
+            window.location.href = '/profile/verification-lvl1/';
             return false;
         }
         state.level = level;
