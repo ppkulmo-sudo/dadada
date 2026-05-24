@@ -4,6 +4,7 @@
         /\/assets\/js\/site-shell\.js/i,
         /\/assets\/js\/main\.js/i,
         /\/assets\/js\/noti\.js/i,
+        /\/assets\/js\/history-captured\.js/i,
         /\/assets\/js\/tools-embed\.js/i
     ];
 

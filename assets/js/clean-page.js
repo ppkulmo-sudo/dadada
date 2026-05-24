@@ -225,6 +225,14 @@
         });
     }
 
+    function loadRouteRuntime(routePath) {
+        var normalizedRoute = normalizeRoutePath(routePath || "/");
+        if (normalizedRoute.indexOf("/profile/history/") === 0) {
+            return loadScript(window.CleanShell.assetUrl("/assets/js/history-captured.js?v=2"));
+        }
+        return Promise.resolve();
+    }
+
     function appendHeadAssets(doc, sourceUrl) {
         var head = document.head;
         head.querySelectorAll('link[data-clean-href], link[href*="_files/"], link[href*="materialdesignicons.min.css"]').forEach(function (node) {
@@ -377,6 +385,7 @@
         }
 
         await loadCommonRuntime();
+        await loadRouteRuntime(routePath);
         await executeScripts(doc, result.contentBaseUrl);
 
         if (window.WixiShell) {
