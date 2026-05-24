@@ -1251,6 +1251,7 @@
     function showAccessPopup(options) {
         ensureAccessPopupStyles();
         closeAccessPopup();
+        var rejectArt = '<svg class="wixi-access-popup__art" viewBox="0 0 342 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="342" height="160" rx="18" fill="#DADDEA"/><path d="M16 16H34V20H20V34H16V16Z" fill="#FFF"/><path d="M326 16H308V20H322V34H326V16Z" fill="#FFF"/><path d="M16 144H34V140H20V126H16V144Z" fill="#FFF"/><path d="M326 144H308V140H322V126H326V144Z" fill="#FFF"/><g transform="translate(96 34) rotate(-12 76 42)"><rect x="0" y="0" width="152" height="84" rx="9" fill="#F6F7FD" stroke="#32344D" stroke-width="4"/><circle cx="40" cy="27" r="13" fill="#27283E"/><rect x="26" y="42" width="28" height="18" rx="9" fill="#27283E"/><rect x="75" y="18" width="55" height="8" rx="4" fill="#27283E"/><rect x="75" y="35" width="42" height="8" rx="4" fill="#27283E" opacity=".72"/></g><circle cx="171" cy="98" r="22" fill="#FF5D5D"/><path d="M161 88L181 108M181 88L161 108" stroke="#FFF" stroke-width="8" stroke-linecap="round"/></svg>';
         var popup = document.createElement("div");
         popup.id = "wixi-access-popup";
         popup.className = "wixi-access-popup";
@@ -1258,7 +1259,7 @@
             '<div class="wixi-access-popup__dialog">' +
                 '<div class="wixi-access-popup__hero">' +
                     '<button type="button" class="wixi-access-popup__close" aria-label="Close">×</button>' +
-                    '<img class="wixi-access-popup__art" src="/assets/img/cardReject.svg" alt="error">' +
+                    rejectArt +
                 '</div>' +
                 '<div class="wixi-access-popup__body">' +
                     '<h2 class="wixi-access-popup__title">' + escapeHtml(options.title || 'Error Occurred') + '</h2>' +

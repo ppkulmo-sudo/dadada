@@ -1,7 +1,7 @@
 function initCapturedSettingsPage() {
-    var notConfiguredIcon = '/assets/img/info.svg';
-    var warningIcon = '/assets/img/banners/warning.png';
-    var arrowRightIcon = '/assets/img/profile/arrow-right.svg';
+    var notConfiguredIconMarkup = '<span aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:1.5px solid #9ca3af;border-radius:50%;color:#6b7280;font-size:11px;font-weight:700;margin-right:6px;vertical-align:middle;">!</span>';
+    var warningIconMarkup = '<span aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#fff1f2;color:#ef4444;font-size:12px;font-weight:700;margin-right:6px;vertical-align:middle;">!</span>';
+    var arrowRightIconMarkup = '<span aria-hidden="true" style="display:inline-block;color:#9ca3af;font-size:16px;font-weight:700;margin-left:6px;vertical-align:middle;">›</span>';
 
     function escapeHtml(value) {
         return String(value == null ? '' : value)
@@ -29,7 +29,7 @@ function initCapturedSettingsPage() {
 
         node.classList.remove('settings-account-item-ready');
         node.classList.add('settings-account-item-unready');
-        node.innerHTML = '<img src="' + notConfiguredIcon + '" alt="not configured">Not Configured';
+        node.innerHTML = notConfiguredIconMarkup + '<span>Not Configured</span>';
     }
 
     function statusIsConfigured(value) {
@@ -85,11 +85,11 @@ function initCapturedSettingsPage() {
 
         if (bannerBottomNode) {
             if (!statuses[2]) {
-                bannerBottomNode.innerHTML = '<img src="' + warningIcon + '" alt="warning"><a href="/profile/security/" style="color: #ef454a">Google 2FA Authentication</a> <img src="' + arrowRightIcon + '" alt="arrow">';
+                bannerBottomNode.innerHTML = warningIconMarkup + '<a href="/profile/security/" style="color: #ef454a">Google 2FA Authentication</a>' + arrowRightIconMarkup;
             } else if (!statuses[3]) {
-                bannerBottomNode.innerHTML = '<img src="' + warningIcon + '" alt="warning"><a href="/profile/security/" style="color: #ef454a">Anti-Phishing Code</a> <img src="' + arrowRightIcon + '" alt="arrow">';
+                bannerBottomNode.innerHTML = warningIconMarkup + '<a href="/profile/security/" style="color: #ef454a">Anti-Phishing Code</a>' + arrowRightIconMarkup;
             } else if (!statuses[1]) {
-                bannerBottomNode.innerHTML = '<img src="' + warningIcon + '" alt="warning"><a href="/profile/verification/" style="color: #ef454a">Identity Verification</a> <img src="' + arrowRightIcon + '" alt="arrow">';
+                bannerBottomNode.innerHTML = warningIconMarkup + '<a href="/profile/verification/" style="color: #ef454a">Identity Verification</a>' + arrowRightIconMarkup;
             } else {
                 bannerBottomNode.innerHTML = '<i class="mdi mdi-check-circle" aria-hidden="true" style="color:#22c55e;margin-right:6px;font-size:18px;vertical-align:middle;"></i><span style="color:#22c55e">All security items are configured.</span>';
             }
