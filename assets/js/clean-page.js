@@ -210,9 +210,9 @@
         return loadScript(window.CleanShell.assetUrl("/assets/js/runtime-config.js?v=1")).catch(function () {
             return Promise.resolve();
         }).then(function () {
-            return loadScript(window.CleanShell.assetUrl("/assets/js/site-shell.js?v=29"));
+            return loadScript(window.CleanShell.assetUrl("/assets/js/site-shell.js?v=30"));
         }).then(function () {
-            return loadScript(window.CleanShell.assetUrl("/assets/js/main.js?v=20"));
+            return loadScript(window.CleanShell.assetUrl("/assets/js/main.js?v=21"));
         });
     }
 

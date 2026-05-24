@@ -793,11 +793,30 @@ function getEarnBalanceNode() {
 
 const ASSETS_SUMMARY_CACHE_KEY = "nohex_assets_summary_cache_v1";
 const ASSETS_SUMMARY_CACHE_TTL_MS = 15000;
-window.__wixiAssetsSummaryState = window.__wixiAssetsSummaryState || {
-    data: null,
-    lastFetched: 0,
-    inFlight: null
-};
+function ensureAssetsSummaryState() {
+    const current = window.__wixiAssetsSummaryState;
+    if (current && typeof current === "object") {
+        if (!Object.prototype.hasOwnProperty.call(current, "data")) {
+            current.data = null;
+        }
+        if (!Object.prototype.hasOwnProperty.call(current, "lastFetched")) {
+            current.lastFetched = 0;
+        }
+        if (!Object.prototype.hasOwnProperty.call(current, "inFlight")) {
+            current.inFlight = null;
+        }
+        return current;
+    }
+
+    window.__wixiAssetsSummaryState = {
+        data: null,
+        lastFetched: 0,
+        inFlight: null
+    };
+    return window.__wixiAssetsSummaryState;
+}
+
+ensureAssetsSummaryState();
 
 function formatAssetsSummaryUsd(value) {
     const amount = parseFloat(value);
@@ -844,7 +863,7 @@ function storeAssetsSummaryCache(summary) {
         return;
     }
 
-    const state = window.__wixiAssetsSummaryState;
+    const state = ensureAssetsSummaryState();
     state.data = summary;
     state.lastFetched = Date.now();
 
@@ -858,7 +877,7 @@ function storeAssetsSummaryCache(summary) {
 }
 
 function getCachedAssetsSummary(maxAgeMs) {
-    const state = window.__wixiAssetsSummaryState;
+    const state = ensureAssetsSummaryState();
     const maxAge = typeof maxAgeMs === "number" ? maxAgeMs : ASSETS_SUMMARY_CACHE_TTL_MS;
 
     if (state.data && (Date.now() - state.lastFetched) <= maxAge) {
@@ -913,7 +932,7 @@ function applyGlobalAssetsSummary(summary) {
 }
 
 function refreshGlobalAssetsSummaryFromApi(force) {
-    const state = window.__wixiAssetsSummaryState;
+    const state = ensureAssetsSummaryState();
 
     if (!window.currentUser || window.currentUser.authenticated !== true) {
         return Promise.resolve(null);
