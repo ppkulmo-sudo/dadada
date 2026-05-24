@@ -227,6 +227,13 @@
 
     function appendHeadAssets(doc, sourceUrl) {
         var head = document.head;
+        head.querySelectorAll('link[data-clean-href], link[href*="_files/"], link[href*="materialdesignicons.min.css"]').forEach(function (node) {
+            var href = node.getAttribute("href") || "";
+            if (/cdnjs\.cloudflare\.com\/ajax\/libs\/MaterialDesign-Webfont/i.test(href)) {
+                return;
+            }
+            node.remove();
+        });
         doc.querySelectorAll('style, link[rel], script[src]').forEach(function (node) {
             if (node.tagName === "SCRIPT") {
                 return;

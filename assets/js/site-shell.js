@@ -1258,7 +1258,7 @@
             '<div class="wixi-access-popup__dialog">' +
                 '<div class="wixi-access-popup__hero">' +
                     '<button type="button" class="wixi-access-popup__close" aria-label="Close">×</button>' +
-                    '<img class="wixi-access-popup__art" src="' + assetUrl('/clean/assets/img/cardReject.svg') + '" alt="error">' +
+                    '<img class="wixi-access-popup__art" src="/assets/img/cardReject.svg" alt="error">' +
                 '</div>' +
                 '<div class="wixi-access-popup__body">' +
                     '<h2 class="wixi-access-popup__title">' + escapeHtml(options.title || 'Error Occurred') + '</h2>' +
