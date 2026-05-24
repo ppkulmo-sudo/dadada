@@ -73,6 +73,12 @@
             cleanPath = "/" + cleanPath;
         }
 
+        if (cleanPath.indexOf("/clean/assets/") === 0) {
+            cleanPath = cleanPath.substring("/clean".length);
+        } else if (cleanPath.indexOf("/clean/fonts/") === 0) {
+            cleanPath = cleanPath.substring("/clean".length);
+        }
+
         if (SITE_PREFIX && (cleanPath === SITE_PREFIX || cleanPath.indexOf(SITE_PREFIX + "/") === 0)) {
             return cleanPath;
         }
@@ -90,6 +96,8 @@
             || normalized.indexOf("/cdn-cgi/") === 0
             || normalized.indexOf("/assets/") === 0
             || normalized.indexOf("/fonts/") === 0
+            || normalized.indexOf("/clean/assets/") === 0
+            || normalized.indexOf("/clean/fonts/") === 0
             || (SITE_PREFIX && (normalized.indexOf(SITE_PREFIX + "/assets/") === 0 || normalized.indexOf(SITE_PREFIX + "/fonts/") === 0));
     }
 

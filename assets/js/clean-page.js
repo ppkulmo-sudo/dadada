@@ -189,7 +189,7 @@
         }).then(function () {
             return loadScript(window.CleanShell.assetUrl("/assets/js/site-shell.js?v=29"));
         }).then(function () {
-            return loadScript(window.CleanShell.assetUrl("/assets/js/main.js?v=16"));
+            return loadScript(window.CleanShell.assetUrl("/assets/js/main.js?v=20"));
         });
     }
 
