@@ -791,6 +791,14 @@ function getEarnBalanceNode() {
     return $("#earn-balance");
 }
 
+const ASSETS_SUMMARY_CACHE_KEY = "nohex_assets_summary_cache_v1";
+const ASSETS_SUMMARY_CACHE_TTL_MS = 15000;
+window.__wixiAssetsSummaryState = window.__wixiAssetsSummaryState || {
+    data: null,
+    lastFetched: 0,
+    inFlight: null
+};
+
 function formatAssetsSummaryUsd(value) {
     const amount = parseFloat(value);
     const normalized = Number.isFinite(amount) ? amount : 0;
@@ -819,48 +827,140 @@ function updateAssetsRow(node, percentNode, amountText, percentText) {
     }
 }
 
-function refreshGlobalAssetsSummaryFromApi() {
-    $.ajax({
+function normalizeAssetsSummaryPayload(response) {
+    let json = response;
+    if (typeof response === "string") {
+        try {
+            json = JSON.parse(response);
+        } catch (_error) {
+            return null;
+        }
+    }
+    return json && typeof json === "object" ? json : null;
+}
+
+function storeAssetsSummaryCache(summary) {
+    if (!summary) {
+        return;
+    }
+
+    const state = window.__wixiAssetsSummaryState;
+    state.data = summary;
+    state.lastFetched = Date.now();
+
+    try {
+        window.localStorage.setItem(ASSETS_SUMMARY_CACHE_KEY, JSON.stringify({
+            saved_at: state.lastFetched,
+            data: summary
+        }));
+    } catch (_error) {
+    }
+}
+
+function getCachedAssetsSummary(maxAgeMs) {
+    const state = window.__wixiAssetsSummaryState;
+    const maxAge = typeof maxAgeMs === "number" ? maxAgeMs : ASSETS_SUMMARY_CACHE_TTL_MS;
+
+    if (state.data && (Date.now() - state.lastFetched) <= maxAge) {
+        return state.data;
+    }
+
+    try {
+        const raw = window.localStorage.getItem(ASSETS_SUMMARY_CACHE_KEY);
+        if (!raw) {
+            return null;
+        }
+        const parsed = JSON.parse(raw);
+        const savedAt = parseInt(parsed && parsed.saved_at, 10);
+        const data = parsed && parsed.data ? parsed.data : null;
+        if (!data || !Number.isFinite(savedAt) || (Date.now() - savedAt) > maxAge) {
+            return null;
+        }
+        state.data = data;
+        state.lastFetched = savedAt;
+        return data;
+    } catch (_error) {
+        return null;
+    }
+}
+
+function applyGlobalAssetsSummary(summary) {
+    if (!summary || !getUsdBalanceNode().length) {
+        return;
+    }
+
+    const totalUsdValue = parseFloat(summary.total_usd || "0");
+    const totalUsdText = (Number.isFinite(totalUsdValue) ? totalUsdValue : 0).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+    const btcApprox = String(summary.btc_approx || "0.00000000");
+    const spotText = formatAssetsSummaryUsd(summary.spot_usd || "0");
+    const tradingText = formatAssetsSummaryUsd(summary.trading_usd || "0");
+    const futuresText = formatAssetsSummaryUsd(summary.futures_usd || "0");
+    const earnText = formatAssetsSummaryUsd(summary.earn_usd || "0");
+
+    getUsdBalanceNode().attr("usd-balance", totalUsdText).text(totalUsdText + " USD");
+    getBtcBalanceNode().attr("btc-balance", btcApprox).text("≈ " + btcApprox + " BTC");
+    updateAssetsRow(getSpotBalanceNode(), $("#spot-balance-percent"), spotText, formatAssetsSummaryPercent(summary.spot_percent || "0"));
+    updateAssetsRow(getMarginBalanceNode(), $("#margin-balance-percent"), tradingText, formatAssetsSummaryPercent(summary.trading_percent || "0"));
+    updateAssetsRow(getFuturesBalanceNode(), $("#futures-balance-percent"), futuresText, formatAssetsSummaryPercent(summary.futures_percent || "0"));
+    updateAssetsRow(getEarnBalanceNode(), $("#earn-balance-percent"), earnText, formatAssetsSummaryPercent(summary.earn_percent || "0"));
+
+    if (typeof window.applyBalanceVisibilityState === "function") {
+        window.applyBalanceVisibilityState();
+    }
+}
+
+function refreshGlobalAssetsSummaryFromApi(force) {
+    const state = window.__wixiAssetsSummaryState;
+
+    if (!window.currentUser || window.currentUser.authenticated !== true) {
+        return Promise.resolve(null);
+    }
+
+    const cached = getCachedAssetsSummary();
+    if (!force && cached && (Date.now() - state.lastFetched) <= ASSETS_SUMMARY_CACHE_TTL_MS) {
+        applyGlobalAssetsSummary(cached);
+        return Promise.resolve(cached);
+    }
+
+    if (state.inFlight) {
+        return state.inFlight;
+    }
+
+    state.inFlight = new Promise(function (resolve) {
+        $.ajax({
         url: "/api/user/assets-summary",
         type: "GET",
         success: function (response) {
-            let json = response;
-            if (typeof response === "string") {
-                try {
-                    json = JSON.parse(response);
-                } catch (_error) {
-                    return;
-                }
-            }
-
-            if (!json || !getUsdBalanceNode().length) {
+            const json = normalizeAssetsSummaryPayload(response);
+            if (!json) {
+                resolve(null);
                 return;
             }
-
-            const totalUsdValue = parseFloat(json.total_usd || "0");
-            const totalUsdText = (Number.isFinite(totalUsdValue) ? totalUsdValue : 0).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-            const btcApprox = String(json.btc_approx || "0.00000000");
-            const spotText = formatAssetsSummaryUsd(json.spot_usd || "0");
-            const tradingText = formatAssetsSummaryUsd(json.trading_usd || "0");
-            const futuresText = formatAssetsSummaryUsd(json.futures_usd || "0");
-            const earnText = formatAssetsSummaryUsd(json.earn_usd || "0");
-
-            getUsdBalanceNode().attr("usd-balance", totalUsdText).text(totalUsdText + " USD");
-            getBtcBalanceNode().attr("btc-balance", btcApprox).text("≈ " + btcApprox + " BTC");
-            updateAssetsRow(getSpotBalanceNode(), $("#spot-balance-percent"), spotText, formatAssetsSummaryPercent(json.spot_percent || "0"));
-            updateAssetsRow(getMarginBalanceNode(), $("#margin-balance-percent"), tradingText, formatAssetsSummaryPercent(json.trading_percent || "0"));
-            updateAssetsRow(getFuturesBalanceNode(), $("#futures-balance-percent"), futuresText, formatAssetsSummaryPercent(json.futures_percent || "0"));
-            updateAssetsRow(getEarnBalanceNode(), $("#earn-balance-percent"), earnText, formatAssetsSummaryPercent(json.earn_percent || "0"));
-
-            if (typeof window.applyBalanceVisibilityState === "function") {
-                window.applyBalanceVisibilityState();
+            storeAssetsSummaryCache(json);
+            applyGlobalAssetsSummary(json);
+            resolve(json);
+        },
+        error: function () {
+            const fallback = getCachedAssetsSummary(60000);
+            if (fallback) {
+                applyGlobalAssetsSummary(fallback);
             }
+            resolve(fallback || null);
+        },
+        complete: function () {
+            state.inFlight = null;
         }
+        });
     });
+
+    return state.inFlight;
 }
+
+window.getCachedAssetsSummary = getCachedAssetsSummary;
+window.refreshGlobalAssetsSummaryFromApi = refreshGlobalAssetsSummaryFromApi;
 
 function updateBalanceToggleIcons(src) {
     $(".assets-hide-show").each(function () {
@@ -996,9 +1096,15 @@ window.addEventListener("wixi:balances", function () {
     setTimeout(refreshGlobalAssetsSummaryFromApi, 100);
 });
 
-setTimeout(refreshGlobalAssetsSummaryFromApi, 400);
-setTimeout(refreshGlobalAssetsSummaryFromApi, 1400);
-setInterval(refreshGlobalAssetsSummaryFromApi, 10000);
+const initialCachedAssetsSummary = getCachedAssetsSummary(60000);
+if (initialCachedAssetsSummary) {
+    applyGlobalAssetsSummary(initialCachedAssetsSummary);
+}
+
+setTimeout(function () {
+    refreshGlobalAssetsSummaryFromApi(true);
+}, 250);
+setInterval(refreshGlobalAssetsSummaryFromApi, 15000);
 
 function formatBytes(bytes, decimals = 2) {
     if (!+bytes) return "0 Bytes";

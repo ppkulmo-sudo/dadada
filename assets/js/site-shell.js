@@ -915,6 +915,10 @@
             return;
         }
 
+        var cachedSummary = typeof window.getCachedAssetsSummary === "function"
+            ? window.getCachedAssetsSummary(60000)
+            : null;
+
         Promise.all([
             fetch(resolveApiUrl("/api/user/balances"), {
                 credentials: "include"
@@ -944,16 +948,7 @@
             }).catch(function () {
                 return { available_margin: "0", futures_equity: "0", positions_margin: "0" };
             }),
-            fetch(resolveApiUrl("/api/user/assets-summary"), {
-                credentials: "include"
-            }).then(function (response) {
-                if (!response.ok) {
-                    throw new Error("assets-summary");
-                }
-                return response.json();
-            }).catch(function () {
-                return null;
-            })
+            Promise.resolve(cachedSummary)
         ]).then(function (results) {
             var balances = results[0] || {};
             var marginData = results[1] || {};
@@ -1055,6 +1050,9 @@
                 window.applyBalanceVisibilityState();
             }
             dispatchBalancesEvent(balances);
+            if (!summary && typeof window.refreshGlobalAssetsSummaryFromApi === "function") {
+                window.refreshGlobalAssetsSummaryFromApi();
+            }
         }).catch(function () {
         });
     }
@@ -1233,11 +1231,11 @@
             ".wixi-access-popup__hero{height:255px;background:radial-gradient(circle at 50% 12%,rgba(255,120,120,.55),rgba(13,14,22,1) 62%);display:flex;align-items:center;justify-content:center;position:relative;}",
             ".wixi-access-popup__close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.9);color:#222;font-size:24px;cursor:pointer;}",
             ".wixi-access-popup__art{width:200px;height:200px;object-fit:contain;filter:drop-shadow(0 18px 24px rgba(0,0,0,.28));}",
-            ".wixi-access-popup__body{padding:22px 32px 28px;text-align:center;}",
-            ".wixi-access-popup__title{margin:0 0 14px;font-size:28px;line-height:1.1;color:#161b22;font-weight:700;}",
+            ".wixi-access-popup__body{padding:22px 32px 28px;text-align:center;font-family:Montserrat,Inter,Segoe UI,Arial,sans-serif;}",
+            ".wixi-access-popup__title{margin:0 0 14px;font-size:28px;line-height:1.1;color:#161b22;font-weight:700;font-family:Montserrat,Inter,Segoe UI,Arial,sans-serif;letter-spacing:-0.02em;}",
             ".wixi-access-popup__underline{display:block;width:148px;height:4px;border-radius:999px;margin:0 auto 18px;background:linear-gradient(90deg,#ef4444,#f59e0b);}",
-            ".wixi-access-popup__text{margin:0 auto 26px;max-width:420px;color:#6b7280;font-size:15px;line-height:1.55;}",
-            ".wixi-access-popup__action{width:100%;height:46px;border:0;border-radius:12px;background:#f7a600;color:#111827;font-size:16px;font-weight:500;cursor:pointer;}",
+            ".wixi-access-popup__text{margin:0 auto 26px;max-width:420px;color:#6b7280;font-size:15px;line-height:1.55;font-family:Montserrat,Inter,Segoe UI,Arial,sans-serif;font-weight:500;}",
+            ".wixi-access-popup__action{width:100%;height:46px;border:0;border-radius:12px;background:#f7a600;color:#111827;font-size:16px;font-weight:600;cursor:pointer;font-family:Montserrat,Inter,Segoe UI,Arial,sans-serif;}",
             "@media (max-width:640px){.wixi-access-popup__hero{height:220px}.wixi-access-popup__body{padding:18px 24px 24px}.wixi-access-popup__title{font-size:22px}}"
         ].join("");
         document.head.appendChild(style);

@@ -99,6 +99,29 @@
         return html;
     }
 
+    function normalizeLegacyAssetPaths(html) {
+        if (!html) {
+            return html;
+        }
+
+        var replacements = [
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/account\.svg/gi, value: "/assets/img/profile/wallet.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/security\.svg/gi, value: "/assets/img/icon/security_1.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/verification\.svg/gi, value: "/assets/img/info.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/referral\.svg/gi, value: "/assets/img/gift.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/api\.svg/gi, value: "/assets/img/info.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/promocodes\.svg/gi, value: "/assets/img/gift.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/empty-list\.svg/gi, value: "/assets/img/empty-list.svg" },
+            { pattern: /\/clean\/assets\/img\/cardReject\.svg/gi, value: "/assets/img/cardReject.svg" },
+            { pattern: /\/clean\/assets\/img\/cardSuccess\.svg/gi, value: "/assets/img/cardSuccess.svg" },
+            { pattern: /\/clean\/assets\/img\/cardNoVerified\.svg/gi, value: "/assets/img/cardNoVerified.svg" }
+        ];
+
+        return replacements.reduce(function (output, item) {
+            return output.replace(item.pattern, item.value);
+        }, html);
+    }
+
     function mergeLocalizedPageContent(localizedHtml, originalHtml, lang) {
         var localizedDoc = new DOMParser().parseFromString(localizedHtml, "text/html");
         var originalDoc = new DOMParser().parseFromString(originalHtml, "text/html");
@@ -152,8 +175,8 @@
             fetchText(sourcePath),
             useLocalized ? fetchText(localizedPath) : Promise.resolve(null)
         ]).then(function (responses) {
-            var sourceHtml = responses[0];
-            var localizedHtml = responses[1];
+            var sourceHtml = normalizeLegacyAssetPaths(responses[0]);
+            var localizedHtml = normalizeLegacyAssetPaths(responses[1]);
 
             if (!sourceHtml) {
                 throw new Error("Failed to load source page: " + sourcePath);

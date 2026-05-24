@@ -77,6 +77,20 @@
             cleanPath = cleanPath.substring("/clean".length);
         } else if (cleanPath.indexOf("/clean/fonts/") === 0) {
             cleanPath = cleanPath.substring("/clean".length);
+        } else if (/_files\/empty-list\.svg$/i.test(cleanPath)) {
+            cleanPath = "/assets/img/empty-list.svg";
+        } else if (/_files\/account\.svg$/i.test(cleanPath)) {
+            cleanPath = "/assets/img/profile/wallet.svg";
+        } else if (/_files\/security\.svg$/i.test(cleanPath)) {
+            cleanPath = "/assets/img/icon/security_1.svg";
+        } else if (/_files\/verification\.svg$/i.test(cleanPath)) {
+            cleanPath = "/assets/img/info.svg";
+        } else if (/_files\/referral\.svg$/i.test(cleanPath)) {
+            cleanPath = "/assets/img/gift.svg";
+        } else if (/_files\/api\.svg$/i.test(cleanPath)) {
+            cleanPath = "/assets/img/info.svg";
+        } else if (/_files\/promocodes\.svg$/i.test(cleanPath)) {
+            cleanPath = "/assets/img/gift.svg";
         }
 
         if (SITE_PREFIX && (cleanPath === SITE_PREFIX || cleanPath.indexOf(SITE_PREFIX + "/") === 0)) {
