@@ -112,6 +112,19 @@
             { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/api\.svg/gi, value: "/assets/img/info.svg" },
             { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/promocodes\.svg/gi, value: "/assets/img/gift.svg" },
             { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/empty-list\.svg/gi, value: "/assets/img/empty-list.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/logo\.svg/gi, value: "/assets/img/logo.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/chat\.svg/gi, value: "/assets/img/chat.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/support-logo-chat\.svg/gi, value: "/assets/img/support-logo-chat.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/arrow-down\.svg/gi, value: "/assets/img/arrow-down.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/arrow-right(?:\(1\))?\.svg/gi, value: "/assets/img/profile/arrow-right.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/warning\.svg/gi, value: "/assets/img/banners/warning.png" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/unready\.svg/gi, value: "/assets/img/info.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/market-cap\.svg/gi, value: "/assets/img/header/market-cap.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/market-screener\.svg/gi, value: "/assets/img/header/market-screener.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/cross-rates\.svg/gi, value: "/assets/img/header/cross-rates.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/heat-map\.svg/gi, value: "/assets/img/header/heat-map.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/technical-analysis\.svg/gi, value: "/assets/img/header/technical-analysis.svg" },
+            { pattern: /(?:\.\/)?Buy(?:\s|&amp;|%20).*?_files\/card\.png/gi, value: "/assets/img/header/card.png" },
             { pattern: /\/clean\/assets\/img\/cardReject\.svg/gi, value: "/assets/img/cardReject.svg" },
             { pattern: /\/clean\/assets\/img\/cardSuccess\.svg/gi, value: "/assets/img/cardSuccess.svg" },
             { pattern: /\/clean\/assets\/img\/cardNoVerified\.svg/gi, value: "/assets/img/cardNoVerified.svg" }
@@ -207,11 +220,7 @@
     }
 
     function loadCommonRuntime() {
-        return loadScript(window.CleanShell.assetUrl("/assets/js/runtime-config.js?v=1")).catch(function () {
-            return Promise.resolve();
-        }).then(function () {
-            return loadScript(window.CleanShell.assetUrl("/assets/js/site-shell.js?v=30"));
-        }).then(function () {
+        return loadScript(window.CleanShell.assetUrl("/assets/js/site-shell.js?v=30")).then(function () {
             return loadScript(window.CleanShell.assetUrl("/assets/js/main.js?v=21"));
         });
     }
@@ -225,6 +234,13 @@
 
             if (node.tagName === "LINK") {
                 var href = node.getAttribute("href") || "";
+                if (
+                    /_files\/css$/i.test(href)
+                    || /_files\/materialdesignicons\.min\.css$/i.test(href)
+                    || /_files\/logo\.svg$/i.test(href)
+                ) {
+                    return;
+                }
                 var cssUrl = new URL(href, sourceUrl);
                 var rewrittenHref = cssUrl.origin === window.location.origin
                     ? window.CleanShell.rewriteSiteUrl(cssUrl.pathname + cssUrl.search + cssUrl.hash)

@@ -22,7 +22,7 @@ function initApiManagementCapturedPage() {
             return;
         }
         if (!rows || rows.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5"><div style="min-width: 800px;margin: -16px;padding: 16px;"><div style="padding-top: 32px;padding-bottom: 32px;display: flex;flex-direction: column;align-items: center;justify-content: center;"><img src="./Buy &amp; Sell Bitcoin, Ethereum _ Cryptocurrency Exchange _ NOHEX api management_files/empty-list.svg" alt="empty"><div style="text-align: center;color: #81858c;margin-top: 16px;font-size: 12px;">No Records</div></div></div></td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5"><div style="min-width: 800px;margin: -16px;padding: 16px;"><div style="padding-top: 32px;padding-bottom: 32px;display: flex;flex-direction: column;align-items: center;justify-content: center;"><img src="/assets/img/empty-list.svg" alt="empty"><div style="text-align: center;color: #81858c;margin-top: 16px;font-size: 12px;">No Records</div></div></div></td></tr>';
             return;
         }
         tbody.innerHTML = rows.map(function (row) {

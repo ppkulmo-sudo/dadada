@@ -1,4 +1,8 @@
 function initCapturedSettingsPage() {
+    var notConfiguredIcon = '/assets/img/info.svg';
+    var warningIcon = '/assets/img/banners/warning.png';
+    var arrowRightIcon = '/assets/img/profile/arrow-right.svg';
+
     function escapeHtml(value) {
         return String(value == null ? '' : value)
             .replace(/&/g, '&amp;')
@@ -25,7 +29,7 @@ function initCapturedSettingsPage() {
 
         node.classList.remove('settings-account-item-ready');
         node.classList.add('settings-account-item-unready');
-        node.innerHTML = '<img src="/clean/profile/settings/Buy%20%26%20Sell%20Bitcoin%2C%20Ethereum%20_%20Cryptocurrency%20Exchange%20_%20NOHEX%20setting%20security%20etc_files/unready.svg">Not Configured';
+        node.innerHTML = '<img src="' + notConfiguredIcon + '" alt="not configured">Not Configured';
     }
 
     function statusIsConfigured(value) {
@@ -81,11 +85,11 @@ function initCapturedSettingsPage() {
 
         if (bannerBottomNode) {
             if (!statuses[2]) {
-                bannerBottomNode.innerHTML = '<img src="/clean/profile/settings/Buy%20%26%20Sell%20Bitcoin%2C%20Ethereum%20_%20Cryptocurrency%20Exchange%20_%20NOHEX%20setting%20security%20etc_files/warning.svg"><a href="/clean/profile/security/" style="color: #ef454a">Google 2FA Authentication</a> <img src="/clean/profile/settings/Buy%20%26%20Sell%20Bitcoin%2C%20Ethereum%20_%20Cryptocurrency%20Exchange%20_%20NOHEX%20setting%20security%20etc_files/arrow-right(1).svg">';
+                bannerBottomNode.innerHTML = '<img src="' + warningIcon + '" alt="warning"><a href="/profile/security/" style="color: #ef454a">Google 2FA Authentication</a> <img src="' + arrowRightIcon + '" alt="arrow">';
             } else if (!statuses[3]) {
-                bannerBottomNode.innerHTML = '<img src="/clean/profile/settings/Buy%20%26%20Sell%20Bitcoin%2C%20Ethereum%20_%20Cryptocurrency%20Exchange%20_%20NOHEX%20setting%20security%20etc_files/warning.svg"><a href="/clean/profile/security/" style="color: #ef454a">Anti-Phishing Code</a> <img src="/clean/profile/settings/Buy%20%26%20Sell%20Bitcoin%2C%20Ethereum%20_%20Cryptocurrency%20Exchange%20_%20NOHEX%20setting%20security%20etc_files/arrow-right(1).svg">';
+                bannerBottomNode.innerHTML = '<img src="' + warningIcon + '" alt="warning"><a href="/profile/security/" style="color: #ef454a">Anti-Phishing Code</a> <img src="' + arrowRightIcon + '" alt="arrow">';
             } else if (!statuses[1]) {
-                bannerBottomNode.innerHTML = '<img src="/clean/profile/settings/Buy%20%26%20Sell%20Bitcoin%2C%20Ethereum%20_%20Cryptocurrency%20Exchange%20_%20NOHEX%20setting%20security%20etc_files/warning.svg"><a href="/clean/profile/verification/" style="color: #ef454a">Identity Verification</a> <img src="/clean/profile/settings/Buy%20%26%20Sell%20Bitcoin%2C%20Ethereum%20_%20Cryptocurrency%20Exchange%20_%20NOHEX%20setting%20security%20etc_files/arrow-right(1).svg">';
+                bannerBottomNode.innerHTML = '<img src="' + warningIcon + '" alt="warning"><a href="/profile/verification/" style="color: #ef454a">Identity Verification</a> <img src="' + arrowRightIcon + '" alt="arrow">';
             } else {
                 bannerBottomNode.innerHTML = '<i class="mdi mdi-check-circle" aria-hidden="true" style="color:#22c55e;margin-right:6px;font-size:18px;vertical-align:middle;"></i><span style="color:#22c55e">All security items are configured.</span>';
             }
@@ -175,14 +179,14 @@ function initCapturedSettingsPage() {
         var verificationButton = rows[1].querySelector('button, a.main__default-btn');
         if (verificationButton) {
             if (verificationButton.tagName === 'A') {
-                verificationButton.setAttribute('href', '/clean/profile/verification/');
+                verificationButton.setAttribute('href', '/profile/verification/');
             }
             verificationButton.onclick = function (event) {
                 if (verificationButton.hasAttribute('disabled')) {
                     event.preventDefault();
                     return false;
                 }
-                window.location.href = '/clean/profile/verification/';
+                window.location.href = '/profile/verification/';
                 return false;
             };
         }
@@ -190,11 +194,11 @@ function initCapturedSettingsPage() {
         var twoFaButton = rows[2].querySelector('button, a.main__default-btn');
         if (twoFaButton) {
             if (twoFaButton.tagName === 'A') {
-                twoFaButton.setAttribute('href', '/clean/profile/security/');
+                twoFaButton.setAttribute('href', '/profile/security/');
             }
             $(twoFaButton).off('click').on('click', function (event) {
                 event.preventDefault();
-                window.location.href = '/clean/profile/security/';
+                window.location.href = '/profile/security/';
                 return false;
             });
         }
@@ -202,11 +206,11 @@ function initCapturedSettingsPage() {
         var antiPhishingButton = rows[3].querySelector('button, a.main__default-btn');
         if (antiPhishingButton) {
             if (antiPhishingButton.tagName === 'A') {
-                antiPhishingButton.setAttribute('href', '/clean/profile/security/');
+                antiPhishingButton.setAttribute('href', '/profile/security/');
             }
             $(antiPhishingButton).off('click').on('click', function (event) {
                 event.preventDefault();
-                window.location.href = '/clean/profile/security/';
+                window.location.href = '/profile/security/';
                 return false;
             });
         }
