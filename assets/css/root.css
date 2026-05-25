@@ -48628,6 +48628,7 @@ progress {
 
 .settings-account-info {
     display: flex;
+    min-width: 0;
 }
 
 .settings-account-info-info {
@@ -48636,6 +48637,8 @@ progress {
     align-items: flex-start;
     justify-content: center;
     margin-left: 12px;
+    min-width: 0;
+    flex: 1 1 auto;
 }
 
 .settings-account-info-email {
@@ -48643,6 +48646,11 @@ progress {
     font-size: 24px;
     line-height: 32px;
     color: #121214;
+    min-width: 0;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .settings-account-info-uid {
@@ -48661,6 +48669,13 @@ progress {
 
 .settings-account-info-uid svg {
     cursor: pointer;
+}
+
+@media(max-width:768px) {
+    .settings-account-info-email {
+        font-size: clamp(18px, 5vw, 24px);
+        line-height: 1.2;
+    }
 }
 
 .settings-account-info-item {
